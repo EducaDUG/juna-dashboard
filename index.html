@@ -162,11 +162,11 @@
   "professional_observation_note": "The learning notes in this dashboard are Mr. Guevara's professional observations based on lessons. They are not fixed labels, diagnoses, grades, or formal assessment results.",
   "stats": {
     "sessions_logged": 3,
-    "distinct_skills_tried": 27,
+    "distinct_skills_tried": 2,
     "milestones_hit": 3
   },
   "skill_threads": {
-    "Marine Science": [
+    "Initiative and self-direction": [
       {
         "session_date_iso": "2026-08-27",
         "session_date": "27 August 2026",
@@ -180,7 +180,9 @@
         "lesson_title": "Ocean Salinity Climate Change",
         "stage": "Growing",
         "evidence": "Juna can construct a well-reasoned, independent argument comparing two competing solutions once she has a concrete simulation or example to reason from."
-      },
+      }
+    ],
+    "Critical thinking": [
       {
         "session_date_iso": "2026-09-17",
         "session_date": "17 September 2026",
@@ -877,10 +879,18 @@ function joinProse(arr){
 
 /* Renders any field that might be a plain string, a real array, or the
    Python-repr-list-as-string bug as clean prose text (HTML-escaped). */
+/* Capitalizes the first letter of a joined/flowing sentence without
+   touching the rest of the string (so mid-sentence proper nouns etc. are
+   left alone). Safe to call on an already-capitalized or empty string. */
+function capitalizeFirst(s){
+  if (!s) return s;
+  return s.charAt(0).toUpperCase() + s.slice(1);
+}
+
 function proseField(v){
   const asArray = toArrayOfStrings(v);
-  if (asArray !== null) return esc(joinProse(asArray));
-  return esc(v || "");
+  if (asArray !== null) return capitalizeFirst(esc(joinProse(asArray)));
+  return capitalizeFirst(esc(v || ""));
 }
 
 function footerHtml(){
@@ -1077,8 +1087,7 @@ function renderProgress(){
         </div>`).join("")}
     </div>
     <div class="card">
-      <h3>Early learning profile</h3>
-      <div class="basis-note">Based on ${lp.based_on_sessions ?? 0} sessions so far — this will keep evolving as more sessions are logged.</div>
+      <h3>Learning profile</h3>
       <div class="profile-grid" style="margin-top:10px;">
         ${[
           ["Engages best when", lp.engages_best_when],
